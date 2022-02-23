@@ -13,7 +13,8 @@ from config import KIRA_URL, KIRA_MONIKER, BOT_TOKEN, CHAT_ID
 def is_active_validator_() -> bool:
     res = requests.get(KIRA_URL).json()
     for validator in res["validators"]:
-        return validator['moniker'] == KIRA_MONIKER
+        if validator['moniker'] == KIRA_MONIKER:
+            return validator['status'] == 'ACTIVE'
 
 
 def is_avail_space() -> bool:
@@ -32,7 +33,7 @@ def send_telegram(reason: str = None):
     url += token
     method = url + "/sendMessage"
 
-    text = 'Validator status is inactive'
+    text = 'Validator status is ACTIVE'
 
     if reason == 'space':
         text = 'Available free space on / less than 10%'
@@ -51,5 +52,5 @@ if __name__ == "__main__":
         time.sleep(60)
         if not is_avail_space():
             send_telegram(reason='space')
-        # if not is_active_validator_():
-        #     send_telegram(reason='status')
+        if is_active_validator_():
+            send_telegram(reason='status')
