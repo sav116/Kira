@@ -18,11 +18,11 @@ def is_active_validator_() -> bool:
 
 def is_avail_space() -> bool:
     os.system('df -Th > /tmp/df.log')
-    with open('/tmp/df.log') as f:
+    with open('tmp.txt') as f:
         for i in f.readlines():
-            use = i.split()[5]
-            if '%' in use and use[0].isdigit():
-                return int(use[:-1]) >= 90
+            use = i.split()
+            if '%' in use[5] and use[5][0].isdigit() and use[6] == '/':
+                return int(use[5][:-1]) <= 90
 
 
 def send_telegram(reason: str = None):
@@ -51,5 +51,5 @@ if __name__ == "__main__":
         time.sleep(60)
         if not is_avail_space():
             send_telegram(reason='space')
-        if not is_active_validator_():
-            send_telegram(reason='status')
+        # if not is_active_validator_():
+        #     send_telegram(reason='status')
