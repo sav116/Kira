@@ -19,7 +19,7 @@ def is_active_validator_() -> bool:
 
 def is_avail_space() -> bool:
     os.system('df -Th > /tmp/df.log')
-    with open('tmp.txt') as f:
+    with open('/tmp/df.log') as f:
         for i in f.readlines():
             use = i.split()
             if '%' in use[5] and use[5][0].isdigit() and use[6] == '/':
